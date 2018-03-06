@@ -1,21 +1,72 @@
+// https://en.wikipedia.org/wiki/Traffic_light
+
+fn main() {
+
+ // https://simple.wikipedia.org/wiki/Traffic_light   
+
+    let us_green = TrafficLight::<US, Green>::apply(US, Green);
+    println!("US traffic Light");
+    us_green.green_rule();
+    let us_yellow = us_green.transition();
+    us_yellow.yellow_rule();
+    let us_red = us_yellow.transition();
+    us_red.red_rule();
+
+    println!();
+
+ // http://www.101computing.net/traffic-lights-challenge/traffic-light-sequence/
+
+    let uk_green = TrafficLight::<UK, Green>::apply(UK, Green);
+    println!("UK traffic Light");
+    uk_green.green_rule();
+    let uk_amber = uk_green.transition();
+    uk_amber.amber_rule();
+    let uk_red = uk_amber.transition();
+    uk_red.red_rule();
+    let uk_amber_red = uk_red.transition();
+    uk_amber_red.amber_red_rule();
+
+// only red lights exists now us green is gone
+// https://en.wikipedia.org/wiki/Substructural_type_system
+    // us_green.green_rule(); // this will not compile
+
+    // uk_amber_red cannot go to red
+
+    let us_amber = TrafficLight::<US, Amber>::apply(US, Amber);
+//  us amber has no defined behaviors
+    // us_amber.transition(); // this will not compile
+    // us_amber.state(); // this will not compile
+    
+}
+
+
+
+
+
+// Country or Region
 struct US;
 struct UK;
 
+// Traffic light's state
 struct Green;
 struct Yellow;
 struct Amber;
 struct AmberRed;
 struct Red;
 
+// state field is not used 
+#[allow(dead_code)] 
 struct TrafficLight<Country, State> {
     country: Country,
     state: State,
 }
 
+// How the trafic light's state changes, note the self
 trait HueState<Country, HueChange> {
     fn transition(self) -> TrafficLight<Country, HueChange>;
 }
 
+// How a new Traffic light is made
 impl<Country, State> TrafficLight<Country, State> {
     fn apply<Region, Hue>(region: Region, hue: Hue) -> TrafficLight<Region, Hue> {
         TrafficLight {
@@ -26,51 +77,52 @@ impl<Country, State> TrafficLight<Country, State> {
 }
 
 
-
-impl<Green> TrafficLight<US, Green> {
+// For Traffic lights of types, in the US with the state green, behaviors
+impl TrafficLight<US, Green> {
     fn green_rule(&self) -> () {
         println!("I am the color Green, which means GO!");
     }
 }
 
-impl<Yellow> TrafficLight<US, Yellow> {
+impl TrafficLight<US, Yellow> {
     fn yellow_rule(&self) -> () {
         println!("I am the color Yellow, which means Use caution!");
     }
 }
 
-impl<Red> TrafficLight<US, Red> {
+impl TrafficLight<US, Red> {
     fn red_rule(&self) -> () {
         println!("I am the color Red, which means STOP!");
     }
 }
 
-impl<Green> TrafficLight<UK, Green> {
+// For Traffic lights of types, in the UK with the state green, behaviors
+impl TrafficLight<UK, Green> {
     fn green_rule(&self) -> () {
         println!("I am the colour Green, which means GO!");
     }
 }
 
-impl<Amber> TrafficLight<UK, Amber> {
+impl TrafficLight<UK, Amber> {
     fn amber_rule(&self) -> () {
         println!("I am the colour Amber, which means Use caution!");
     }
 }
 
-impl<AmberRed> TrafficLight<UK, AmberRed> {
+impl TrafficLight<UK, AmberRed> {
     fn amber_red_rule(&self) -> () {
         println!("I am the colour Amber & Red, which means prepare for Green!");
     }
 }
 
-impl<Red> TrafficLight<UK, Red> {
+impl TrafficLight<UK, Red> {
     fn red_rule(&self) -> () {
         println!("I am the colour Red, which means STOP!");
     }
 }
 
 
-
+// Light changes from green ~> yellow in the us
 impl HueState<US, Yellow> for TrafficLight<US, Green> {
     fn transition(self) -> TrafficLight<US, Yellow> {
         println!("I was Green, now I am Yellow");
@@ -101,6 +153,7 @@ impl HueState<US, Green> for TrafficLight<US, Red> {
     }
 }
 
+// Light changes from green ~> amber in the uk
 impl HueState<UK, Amber> for TrafficLight<UK, Green> {
     fn transition(self) -> TrafficLight<UK, Amber> {
         println!("I was Green, now I am Amber");
@@ -139,28 +192,4 @@ impl HueState<UK, Green> for TrafficLight<UK, AmberRed> {
             state: Green,
         }
     }
-}
-
-
-
-fn main() {
-    let us_green = TrafficLight::<US, Green>::apply(US, Green);
-    println!("US traffic Light");
-    us_green.green_rule();
-    let us_yellow = us_green.transition();
-    us_yellow.yellow_rule();
-    let us_red = us_yellow.transition();
-    us_red.red_rule();
-
-    println!();
-
-    let uk_green = TrafficLight::<UK, Green>::apply(UK, Green);
-    println!("UK traffic Light");
-    uk_green.green_rule();
-    let uk_amber = uk_green.transition();
-    uk_amber.amber_rule();
-    let uk_red = uk_amber.transition();
-    uk_red.red_rule();
-    let uk_amber_red = uk_red.transition();
-    uk_amber_red.amber_red_rule();
 }
