@@ -32,6 +32,7 @@ fn main() {
 
     // uk_amber_red cannot go to red
 
+#[allow(unused_variables)]
     let us_amber = TrafficLight::<US, Amber>::apply(US, Amber);
 //  us amber has no defined behaviors
     // us_amber.transition(); // this will not compile
