@@ -5,5 +5,4 @@ name = "traffic_light"
 version = "0.1.0"
 
 [dependencies]
-nannou = {git = "https://github.com/nannou-org/nannou", rev = "3522d807567c0241ff1b84855299330eb5e11dc0"}
 iced = { version = "0.10.0", features = ["debug", "canvas"] }
