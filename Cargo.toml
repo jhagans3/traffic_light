@@ -5,4 +5,4 @@ name = "traffic_light"
 version = "0.1.0"
 
 [dependencies]
-iced = { version = "0.10.0", features = ["debug", "canvas"] }
+iced = { version = "0.12.0", features = ["debug", "canvas"] }

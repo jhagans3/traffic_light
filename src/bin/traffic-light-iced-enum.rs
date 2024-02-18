@@ -178,12 +178,13 @@ impl Application for TrafficLight {
         let us_button = button("US").padding(10).on_press(Message::USButton);
         let uk_button = button("UK").padding(10).on_press(Message::UKButton);
         let ger_button = button("GER").padding(10).on_press(Message::GERButton);
-        let next_button = button("NEXT").padding(10).on_press(Message::NEXT);
+        let next_button = button("NEXT STATE").padding(10).on_press(Message::NEXT);
 
         let canvas = Canvas::new(self);
 
         let content = row![
-            column![us_button, uk_button, ger_button, next_button],
+            column![us_button, uk_button, ger_button],
+            column![next_button],
             column![canvas]
         ];
 
